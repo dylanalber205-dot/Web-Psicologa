@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brisa Casa — Perfuminas y difusores</title>
+<meta name="description" content="Perfuminas textiles, difusores de varillas y aromatizadores para auto. Armá tu pedido y coordinalo por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F2F8;--ink:#231C3A;--mut:#645F7B;--card:#fff;--line:#DEDAEA;--wa:#1F7A4D;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17132A;--ink:#F1EEFA;--mut:#A9A3C0;--card:#221C3D;--line:#3A3358;--wa:#2E9E66}}
+:root[data-theme="dark"]{--bg:#17132A;--ink:#F1EEFA;--mut:#A9A3C0;--card:#221C3D;--line:#3A3358;--wa:#2E9E66}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 Figtree,system-ui,sans-serif}
+h1,h2,h3,.logo{font-family:"Bricolage Grotesque",Georgia,sans-serif;line-height:1.08;margin:0}
+a{color:inherit}button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--wa);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 1.25rem}
+section{padding:4.5rem 0}
+h2{font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:700;margin-bottom:1rem}
+.lead{color:var(--mut);max-width:56ch}
+.btn{display:inline-block;border:2px solid var(--ink);background:var(--ink);color:var(--bg);padding:.7rem 1.3rem;border-radius:999px;font-weight:600;text-decoration:none}
+.btn.alt{background:transparent;color:var(--ink)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:1.5rem;height:64px}
+.logo{font-size:1.35rem;font-weight:800;text-decoration:none;margin-right:auto}
+.top nav{display:flex;gap:1.25rem}.top nav a{text-decoration:none;color:var(--mut);font-weight:500}
+#open{display:flex;gap:.5rem;align-items:center;background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:.55rem 1rem;font-weight:600}
+#cnt{background:var(--bg);color:var(--ink);border-radius:999px;min-width:1.5rem;text-align:center;font-size:.85rem}
+.hero{padding-top:3.5rem}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:end}
+h1{font-size:clamp(2.4rem,7vw,4.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:1.2rem}
+.cta{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.6rem}
+.shelf{display:flex;align-items:flex-end;justify-content:center;gap:14px;padding:3rem .5rem 0;min-height:270px;border-bottom:3px solid var(--ink)}
+.bt{display:block;position:relative;width:54px;height:var(--h,84px);border-radius:12px 12px 9px 9px;background:linear-gradient(90deg,rgba(255,255,255,.35),transparent 40%,rgba(0,0,0,.12)),var(--c)}
+.bt::before{content:"";position:absolute;left:50%;top:-18px;width:22px;height:20px;margin-left:-11px;background:var(--ink);border-radius:5px 5px 2px 2px}
+.t-d{border-radius:16px}
+.t-d::before{width:14px;height:8px;margin-left:-7px;top:-8px;border-radius:3px}
+.t-d::after{content:"";position:absolute;left:50%;top:-50px;width:3px;height:46px;margin-left:-6px;background:#B9A27E;transform:rotate(-8deg);box-shadow:8px 2px 0 #B9A27E,14px 0 0 #B9A27E}
+.t-a{width:38px;border-radius:8px}
+.t-a::before{width:2px;height:30px;top:-28px;margin-left:-1px;border-radius:0;background:var(--mut)}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:1.5rem}
+.way{padding:1.6rem 1.4rem 1.6rem 0;border-right:1px solid var(--line);margin-right:1.4rem}
+.way:last-child{border:0;margin:0}
+.way h3{font-size:1.3rem;margin-bottom:.4rem}.way p{color:var(--mut);margin:0 0 .8rem}
+.way button{background:none;border:0;padding:0;font-weight:600;text-decoration:underline;text-underline-offset:4px}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.4rem 0 2rem}
+.chip{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:.4rem 1rem;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.25rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
+.vis{display:grid;place-items:end center;height:170px;padding-bottom:22px;background:color-mix(in srgb,var(--c) 24%,var(--card))}
+.info{padding:1rem;display:flex;flex-direction:column;gap:.2rem;flex:1}
+.info h3{font-size:1.05rem;font-weight:700}.info small{color:var(--mut)}
+.buy{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:.8rem}
+.buy b{font-size:1.1rem}
+.add{border:2px solid var(--ink);background:transparent;border-radius:999px;padding:.35rem .9rem;font-weight:600}
+.add:hover{background:var(--ink);color:var(--bg)}
+.about .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:2.5rem;align-items:center}
+.avatar{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#B7A3D9,#8E5A9B);max-width:280px;width:100%}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.5rem}
+blockquote{margin:0;padding-left:1rem;border-left:3px solid var(--ink)}
+blockquote cite{display:block;margin-top:.5rem;color:var(--mut);font-style:normal;font-weight:600}
+details{border-bottom:1px solid var(--line);padding:1rem 0}
+summary{cursor:pointer;font-weight:600;font-size:1.05rem}
+details p{color:var(--mut);margin:.6rem 0 0;max-width:62ch}
+footer{background:var(--ink);color:var(--bg);padding:3rem 0 2rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:2rem;justify-content:space-between}
+footer a{display:block;text-decoration:none;opacity:.85;margin:.2rem 0}
+footer small{display:block;width:100%;opacity:.6}
+#veil{position:fixed;inset:0;background:rgba(10,6,25,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:30}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--card);z-index:31;transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;padding:calc(1rem + env(safe-area-inset-top,0px)) 1.25rem calc(1rem + env(safe-area-inset-bottom,0px))}
+body.open #veil{opacity:1;pointer-events:auto}body.open #drawer{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.dh h2{font-size:1.5rem;margin:0}.dh button{background:none;border:0;font-size:1.8rem;line-height:1}
+#items{flex:1;overflow:auto}
+.it{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;padding:.8rem 0;border-bottom:1px solid var(--line)}
+.it small{color:var(--mut)}
+.qty{display:flex;align-items:center;gap:.5rem;grid-column:1/-1}
+.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);background:none;font-weight:700}
+.empty{color:var(--mut);padding:1rem 0}
+.tot{display:flex;justify-content:space-between;font-size:1.2rem;font-weight:700;padding:1rem 0 .8rem}
+#wa{display:block;text-align:center;background:var(--wa);color:#fff;font-weight:600;padding:.85rem;border-radius:999px;text-decoration:none}
+#wa[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.note{color:var(--mut);font-size:.85rem;text-align:center;margin:.6rem 0 0}
+#toast{position:fixed;left:50%;bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:.6rem 1.2rem;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:40;font-weight:500}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:760px){
+.top nav{display:none}
+.hero .wrap,.about .wrap{grid-template-columns:1fr}
+.ways,.quotes{grid-template-columns:1fr}
+.way{border-right:0;border-bottom:1px solid var(--line);margin:0;padding-right:0}.way:last-child{border-bottom:0}
+.shelf{gap:8px}.bt{width:42px}
+section{padding:3rem 0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="#inicio">Brisa Casa</a>
+<nav><a href="#tienda">Tienda</a><a href="#nosotros">Sobre mí</a><a href="#faq">Preguntas</a><a href="#contacto">Contacto</a></nav>
+<button id="open" aria-label="Abrir carrito">Carrito <b id="cnt">0</b></button>
+</div></header>
+
+<main id="inicio">
+<section class="hero"><div class="wrap">
+<div>
+<h1>Que cada espacio tenga su propia esencia.</h1>
+<p class="lead">Perfuminas para telas, difusores de varillas y aromatizadores para auto, hechos en pequeños lotes. Elegí tus aromas, armá el pedido y lo coordinamos por WhatsApp.</p>
+<div class="cta"><a class="btn" href="#tienda">Ver fragancias</a><a class="btn alt" href="#nosotros">Sobre mí</a></div>
+</div>
+<div class="shelf" id="shelf" aria-hidden="true"></div>
+</div>
+<div class="wrap"><div class="ways">
+<div class="way"><h3>Perfuminas</h3><p>Perfumá ropa de cama, cortinas y sillones en segundos. Frasco de 250 ml.</p><button data-cat="perfuminas">Ver perfuminas</button></div>
+<div class="way"><h3>Difusores con varillas</h3><p>Aroma continuo durante semanas, sin esfuerzo. Frasco de 125 ml.</p><button data-cat="difusores">Ver difusores</button></div>
+<div class="way"><h3>Aromatizadores para auto</h3><p>Tu aroma favorito en cada viaje. Colgantes y duraderos.</p><button data-cat="auto">Ver aromatizadores</button></div>
+</div></div>
+</section>
+
+<section id="tienda"><div class="wrap">
+<h2>Nuestra colección</h2>
+<p class="lead">Combiná fragancias y sumá lo que quieras al carrito. Al final se abre WhatsApp con tu pedido listo para coordinar disponibilidad, pago y envío.</p>
+<div class="chips" id="chips">
+<button class="chip" data-cat="todos" aria-pressed="true">Todos</button>
+<button class="chip" data-cat="perfuminas" aria-pressed="false">Perfuminas</button>
+<button class="chip" data-cat="difusores" aria-pressed="false">Difusores</button>
+<button class="chip" data-cat="auto" aria-pressed="false">Aromatizadores para auto</button>
+</div>
+<div class="grid" id="grid"></div>
+</div></section>
+
+<section id="nosotros" class="about"><div class="wrap">
+<div class="avatar" role="img" aria-label="Foto de la fundadora (reemplazar)"></div>
+<div>
+<h2>Hola, soy Sofi</h2>
+<p class="lead">Siempre me gustaron los aromas y todo lo que hace que un lugar se sienta más cálido. Un día me animé a mezclar eso con las ganas de crear algo propio.</p>
+<p class="lead">Cada lote se prepara a mano y con cuidado en los detalles. Gracias por estar del otro lado.</p>
+</div>
+</div></section>
+
+<section><div class="wrap">
+<h2>Clientes que volvieron por más</h2>
+<div class="quotes">
+<blockquote>Se lo pongo a la ropa después de lavarla y se nota todo el día.<cite>Rocío</cite></blockquote>
+<blockquote>Me encanta la variedad de aromas que hay para elegir.<cite>Flor</cite></blockquote>
+<blockquote>El difusor perdura un montón. Ya pedí otro.<cite>Marcos</cite></blockquote>
+</div>
+</div></section>
+
+<section id="faq"><div class="wrap">
+<h2>Preguntas frecuentes</h2>
+<details><summary>¿Dónde puedo usar las perfuminas?</summary><p>En telas, ropa de cama, cortinas, sillones, tapizados, interior del auto y cualquier espacio que quieras perfumar.</p></details>
+<details><summary>¿Cuánto dura el aroma?</summary><p>Depende de la fragancia, la cantidad aplicada y la ventilación del ambiente. En telas suele quedar más tiempo que en el aire.</p></details>
+<details><summary>¿Cómo se usan los difusores?</summary><p>Poné las varillas dentro del frasco y dejá que absorban la fragancia. Para intensificar el aroma, giralas de vez en cuando. Ubicalo en un lugar ventilado y lejos del sol directo.</p></details>
+<details><summary>¿Cómo hacen los envíos?</summary><p>Enviamos a todo el país. Armás el carrito, nos lo mandás por WhatsApp, confirmamos con el pago y te pedimos los datos de envío. Cuando despachamos, te pasamos el seguimiento.</p></details>
+<details><summary>¿Qué medios de pago aceptan?</summary><p>Transferencia bancaria, desde tu banco o cualquier billetera virtual.</p></details>
+</div></section>
+</main>
+
+<footer id="contacto"><div class="wrap">
+<div><div class="logo">Brisa Casa</div><p style="opacity:.75;max-width:34ch">Perfuminas textiles y difusores de varillas hechos en pequeños lotes.</p></div>
+<div><b>Tienda</b><a href="#tienda">Perfuminas</a><a href="#tienda">Difusores</a><a href="#tienda">Aromatizadores para auto</a></div>
+<div><b>Contacto</b><a id="fwa" href="#">WhatsApp</a><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a><a href="#">Buenos Aires, AR</a></div>
+<small>© 2026 Brisa Casa · Todos los derechos reservados.</small>
+</div></footer>
+
+<div id="veil"></div>
+<aside id="drawer" aria-label="Carrito">
+<div class="dh"><h2>Tu carrito</h2><button id="close" aria-label="Cerrar carrito">×</button></div>
+<div id="items"></div>
+<div class="tot"><span>Total</span><span id="total">$0</span></div>
+<a id="wa" href="#" target="_blank" rel="noopener" aria-disabled="true">Pedir por WhatsApp</a>
+<p class="note">Se abre WhatsApp con tu pedido listo. Coordinás pago y envío ahí.</p>
+</aside>
+<div id="toast" role="status">Agregado al carrito</div>
+
+<script>
+// ===== CONFIGURACIÓN: cambiá estos datos =====
+var CONFIG={brand:"Brisa Casa",whatsapp:"5491100000000"}; // número con código de país, sin + ni espacios
+// =============================================
+var $=function(s){return document.querySelector(s)};
+var money=function(n){return new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0}).format(n)};
+var A=[["Vainilla & Azúcar","#E9C98A"],["Lavanda & Manzanilla","#B7A3D9"],["Coco & Vainilla","#E3D7BE"],["Frutos del bosque","#8E5A9B"],["Manzana & Canela","#C9684E"],["Limón & Bambú","#B5D56A"]];
+var P=[];
+A.forEach(function(a,i){P.push({id:"p"+i,t:"p",cat:"perfuminas",name:"Perfumina "+a[0],det:"250 ml",price:8900,c:a[1],h:96})});
+A.forEach(function(a,i){P.push({id:"d"+i,t:"d",cat:"difusores",name:"Difusor "+a[0],det:"125 ml",price:12900,c:a[1],h:70})});
+A.slice(0,3).forEach(function(a,i){P.push({id:"a"+i,t:"a",cat:"auto",name:"Aromatizador auto "+a[0],det:"Colgante",price:5500,c:a[1],h:60})});
+
+$("#shelf").innerHTML=A.map(function(a,i){return '<i class="bt t-p" style="--c:'+a[1]+';--h:'+[120,150,110,140,125,160][i]+'px"></i>'}).join("");
+$("#fwa").href="https://wa.me/"+CONFIG.whatsapp;
+
+var cart={};
+try{cart=JSON.parse(localStorage.getItem("cart-v1")||"{}")||{}}catch(e){cart={}}
+var cat="todos";
+
+function drawGrid(){
+  $("#grid").innerHTML=P.filter(function(p){return cat==="todos"||p.cat===cat}).map(function(p){
+    return '<article class="card"><div class="vis" style="--c:'+p.c+'"><i class="bt t-'+p.t+'" style="--c:'+p.c+';--h:'+p.h+'px"></i></div>'+
+    '<div class="info"><h3>'+p.name+'</h3><small>'+p.det+'</small><div class="buy"><b>'+money(p.price)+'</b><button class="add" data-add="'+p.id+'">Agregar</button></div></div></article>';
+  }).join("");
+}
+function setCat(c){
+  cat=c;
+  document.querySelectorAll(".chip").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.cat===c)});
+  drawGrid();
+}
+function save(){try{localStorage.setItem("cart-v1",JSON.stringify(cart))}catch(e){}}
+function lines(){
+  return Object.keys(cart).map(function(id){var p=P.find(function(x){return x.id===id});return p&&cart[id]>0?{p:p,q:cart[id]}:null}).filter(Boolean);
+}
+function drawCart(){
+  var L=lines(),n=0,tot=0;
+  L.forEach(function(l){n+=l.q;tot+=l.q*l.p.price});
+  $("#cnt").textContent=n;
+  $("#total").textContent=money(tot);
+  $("#items").innerHTML=L.length?L.map(function(l){
+    return '<div class="it"><div><b>'+l.p.name+'</b><br><small>'+l.p.det+'</small></div><b>'+money(l.p.price*l.q)+'</b>'+
+    '<div class="qty"><button data-dec="'+l.p.id+'" aria-label="Quitar uno">−</button><span>'+l.q+'</span><button data-inc="'+l.p.id+'" aria-label="Sumar uno">+</button></div></div>';
+  }).join(""):'<p class="empty">Todavía no agregaste nada. Elegí tus aromas en la tienda.</p>';
+  var wa=$("#wa");
+  wa.setAttribute("aria-disabled",L.length?"false":"true");
+  if(L.length){
+    var msg="Hola "+CONFIG.brand+"! Quiero hacer este pedido:\n"+L.map(function(l){return "• "+l.q+" x "+l.p.name+" ("+l.p.det+") — "+money(l.p.price*l.q)}).join("\n")+"\n\nTotal: "+money(tot)+"\n¿Me confirman disponibilidad, pago y envío?";
+    wa.href="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(msg);
+  }else wa.href="#";
+  save();
+}
+var tt;
+function toast(){var t=$("#toast");t.classList.add("on");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("on")},1600)}
+function toggle(o){document.body.classList.toggle("open",o)}
+
+document.addEventListener("click",function(e){
+  var t=e.target.closest("button");
+  if(!t)return;
+  if(t.dataset.add){cart[t.dataset.add]=(cart[t.dataset.add]||0)+1;drawCart();toast()}
+  else if(t.dataset.inc){cart[t.dataset.inc]++;drawCart()}
+  else if(t.dataset.dec){cart[t.dataset.dec]--;if(cart[t.dataset.dec]<=0)delete cart[t.dataset.dec];drawCart()}
+  else if(t.classList.contains("chip")||(t.dataset.cat&&t.closest(".way"))){
+    setCat(t.dataset.cat);
+    if(t.closest(".way"))$("#tienda").scrollIntoView();
+  }
+});
+$("#open").onclick=function(){toggle(true)};
+$("#close").onclick=$("#veil").onclick=function(){toggle(false)};
+document.addEventListener("keydown",function(e){if(e.key==="Escape")toggle(false)});
+
+drawGrid();drawCart();
+</script>
+</body>
+</html>
