@@ -1,45 +1,119 @@
+
 <!DOCTYPE html>
 <html lang="es">
+<!-- PORTAFOLIO WEB - Dylan
+     Archivo único con tres capas: HTML (estructura), CSS (diseño) y JavaScript
+     (comportamiento). Se publica tal cual en GitHub Pages: no necesita servidor ni
+     instalación.
+     Organización del archivo:
+     1) HEAD: metadatos para buscadores y vista previa en redes.
+     2) STYLE: variables, estilos base, componentes, animaciones y adaptación a celular.
+     3) BODY: las secciones de la página.
+     4) SCRIPT: datos editables, contenido dinámico, medición y animaciones. -->
 <head>
+<!-- Codificación UTF-8: hace que se vean bien las tildes, la ñ y los símbolos. -->
 <meta charset="utf-8">
+<!-- Hace que la página se adapte al ancho real del celular (diseño responsive).
+     viewport-fit=cover permite usar toda la pantalla en celulares con notch. -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Diseño web para negocios y profesionales</title>
-<meta name="description" content="Diseño páginas web claras, rápidas y pensadas para que te contacten por WhatsApp. Mirá los estilos que puedo aplicar a tu negocio.">
+<!-- Título de la pestaña y del resultado en Google. Más abajo el script lo vuelve a armar
+     con CONFIG.name, para que el nombre se cambie en un solo lugar. -->
+<title>Dylan · Diseño web para emprendedores y profesionales</title>
+<!-- Descripción que Google suele mostrar bajo el título: parte básica del SEO. -->
+<meta name="description" content="Webs claras, rápidas y con botón directo a WhatsApp. Mirá los estilos que puedo aplicar a tu negocio y pedí tu presupuesto sin compromiso.">
+<!-- Open Graph: etiquetas que leen Facebook y WhatsApp para armar la tarjeta (título,
+     descripción e imagen) cuando alguien comparte el link. Tienen que estar en el HTML
+     estático porque, en general, esos rastreadores no ejecutan JavaScript. -->
+<!-- Vista previa al compartir en Facebook/WhatsApp: reemplazá TU-USUARIO y TU-REPO por los tuyos y subí og-portafolio.png al repo -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Dylan · Diseño web para emprendedores y profesionales">
+<meta property="og:description" content="Webs claras, rápidas y con botón directo a WhatsApp. Mirá los estilos y pedí tu presupuesto sin compromiso.">
+<meta property="og:url" content="https://TU-USUARIO.github.io/TU-REPO/portafolio.html">
+<meta property="og:image" content="https://TU-USUARIO.github.io/TU-REPO/og-portafolio.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Rendimiento: abre la conexión con Google Fonts antes de pedir la tipografía, así carga
+     más rápido. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Tipografías: Bricolage Grotesque para títulos y Figtree para el texto. display=swap
+     muestra el texto con una fuente del sistema mientras descarga, para que nunca quede
+     invisible. -->
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ===== 1. VARIABLES DE DISEÑO =====
+   Los colores se guardan en variables CSS (--bg, --ink, --acc...) y se usan con
+   var(--nombre). Cambiar la paleta completa es tocar estas líneas, no cientos de reglas.
+   env(safe-area-inset-*) respeta las zonas que el celular ocupa con la barra inferior o el
+   notch. */
 :root{--bg:#F5F6F8;--ink:#0E1B2C;--mut:#5B6678;--card:#fff;--line:#DCE1E8;--acc:#C8F169;--accink:#0E1B2C;--wa:#1F7A4D;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Modo oscuro automático: si el dispositivo del visitante está en modo oscuro, se
+   redefinen solo las variables que cambian. La condición :not([data-theme="light"])
+   permite forzar el modo claro si algún día se agrega un botón para elegir. */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B1422;--ink:#EEF2F7;--mut:#9AA6B8;--card:#121F33;--line:#243450;--wa:#2E9E66}}
+/* Modo oscuro manual: con data-theme="dark" en la etiqueta html se fuerza este tema sin
+   depender del sistema. */
 :root[data-theme="dark"]{--bg:#0B1422;--ink:#EEF2F7;--mut:#9AA6B8;--card:#121F33;--line:#243450;--wa:#2E9E66}
+/* ===== 2. ESTILOS BASE =====
+   box-sizing:border-box (heredado con inherit) hace que el padding y el borde queden
+   dentro del ancho de cada caja, lo que simplifica calcular medidas. */
 *,*::before,*::after{box-sizing:inherit}
+/* Desplazamiento suave al tocar los enlaces del menú. scroll-padding-top deja lugar para
+   que la barra fija no tape el título de la sección a la que se salta. */
 html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+/* El fondo y el color del texto salen de las variables, así cambian solos con el modo
+   oscuro. Si Google Fonts no carga, la lista de fuentes cae a system-ui (la fuente del
+   sistema). */
 body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 Figtree,system-ui,sans-serif}
+/* Los títulos comparten tipografía y un interlineado ajustado (line-height). */
 h1,h2,h3,.logo{font-family:"Bricolage Grotesque",Georgia,sans-serif;line-height:1.08;margin:0}
 a{color:inherit}
+/* Accesibilidad: anillo visible al navegar con el teclado (tecla Tab). :focus-visible no
+   molesta a quien usa mouse o pantalla táctil. */
 :focus-visible{outline:3px solid var(--wa);outline-offset:2px}
+/* .wrap es un contenedor centrado con ancho máximo: mantiene las líneas cómodas de leer en
+   pantallas grandes y deja margen lateral en el celular. */
 .wrap{max-width:1080px;margin:0 auto;padding:0 1.25rem}
 section{padding:4.5rem 0}
+/* clamp(mínimo, ideal, máximo): el tamaño del título crece con el ancho de la pantalla sin
+   pasarse de esos límites, y no hace falta una media query. */
 h2{font-size:clamp(1.8rem,4.5vw,2.7rem);font-weight:700;margin-bottom:1rem;letter-spacing:-.01em}
+/* La unidad ch equivale al ancho de un carácter: max-width:58ch limita el párrafo a unos
+   58 caracteres por línea, el largo más legible. */
 .lead{color:var(--mut);max-width:58ch}
+/* ===== 3. COMPONENTES =====
+   Botón principal (.btn). Su variante .btn.alt es de contorno, para acciones secundarias.
+   border-radius:999px lo deja en forma de píldora. */
 .btn{display:inline-block;border:2px solid var(--acc);background:var(--acc);color:var(--accink);padding:.7rem 1.3rem;border-radius:999px;font-weight:600;text-decoration:none}
 .btn.alt{background:transparent;color:var(--ink);border-color:var(--ink)}
+/* Barra superior fija: position:sticky la mantiene visible al bajar sin usar JavaScript, y
+   z-index la pone por encima del contenido. */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:1.5rem;height:64px}
 .logo{font-size:1.3rem;font-weight:800;text-decoration:none;margin-right:auto}
 .top nav{display:flex;gap:1.25rem}.top nav a{text-decoration:none;color:var(--mut);font-weight:500}
 .top .btn{padding:.45rem 1rem}
+/* Portada (hero): dos columnas con CSS Grid. Las fracciones 1.05fr y .95fr reparten el
+   ancho, y align-items:center las alinea al centro. */
 .hero{padding-top:3.5rem}
 .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:2.5rem;align-items:center}
 .eyebrow{display:inline-block;border:1.5px solid var(--ink);border-radius:999px;padding:.2rem .9rem;font-size:.85rem;font-weight:600;margin-bottom:1.2rem}
 h1{font-size:clamp(2.4rem,6.5vw,4.3rem);font-weight:800;letter-spacing:-.02em;margin-bottom:1.2rem}
 .cta{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.6rem}
+/* Pila de ventanas de ejemplo: con position:absolute las ventanas se superponen y
+   transform:rotate les da el efecto de tarjetas apiladas. */
 .stack{position:relative;height:360px}
 .stack .fr{position:absolute;width:76%}
 .stack .fr:nth-child(1){left:0;top:0;transform:rotate(-4deg)}
 .stack .fr:nth-child(2){right:0;top:80px;transform:rotate(3deg)}
 .stack .fr:nth-child(3){left:10%;top:170px;transform:rotate(-1.5deg)}
+/* Maqueta de página (.fr): una mini web dibujada solo con HTML y CSS, sin imágenes. Sus
+   colores llegan por variables locales (--a fondo, --b texto, --c acento, --r redondeo,
+   --f fuente) que el JavaScript escribe en cada tarjeta. Con un solo molde salen todos los
+   estilos distintos. */
 .fr{background:var(--a);color:var(--b);border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.08);font-family:var(--f)}
 .fr .bar{height:22px;background:rgba(0,0,0,.1);display:flex;gap:5px;align-items:center;padding-left:10px}
 .fr .bar i{width:7px;height:7px;border-radius:50%;background:var(--b);opacity:.4}
@@ -53,27 +127,40 @@ h1{font-size:clamp(2.4rem,6.5vw,4.3rem);font-weight:800;letter-spacing:-.02em;ma
 .fr u{display:inline-block;background:var(--c);color:var(--a);padding:5px 14px;border-radius:var(--r);text-decoration:none;font-size:.72rem;font-weight:700;margin-top:10px;font-family:system-ui,sans-serif}
 .fr .cs{display:flex;gap:8px;margin-top:14px}
 .fr .cs i{flex:1;height:34px;border-radius:calc(var(--r) / 3);background:var(--c);opacity:.35}
+/* Franja de 4 promesas bajo la portada: grilla de 4 columnas separada por líneas finas. */
 .promises{padding:1.5rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .promises .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
 .promises b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:1.05rem}
 .promises span{color:var(--mut);font-size:.92rem}
+/* Sección de estilos: grilla de 2 columnas con una tarjeta (.sc) por estilo. */
 .styles{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:2rem}
 .sc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.2rem;display:flex;flex-direction:column;gap:.6rem}
 .sc .fr{box-shadow:none}
+/* Con una cantidad impar de estilos, la última tarjeta ocupa todo el ancho (grid-column:1/-1) y su maqueta se centra con un ancho máximo, para no dejar un hueco vacío en la grilla. */
+.styles .sc:last-child:nth-child(odd){grid-column:1/-1}
+.styles .sc:last-child:nth-child(odd) .fr{width:100%;max-width:520px;margin-inline:auto}
 .sc h3{font-size:1.3rem;margin-top:.6rem}
 .sc p{margin:0;color:var(--mut)}
 .tags{display:flex;gap:.4rem;flex-wrap:wrap}
 .tags span{font-size:.78rem;border:1px solid var(--line);border-radius:999px;padding:.1rem .7rem;color:var(--mut)}
 .sc .cta{margin-top:auto;padding-top:.6rem}
+/* Servicios: 3 columnas, cada una con una línea superior como separador visual. */
 .svc{display:grid;grid-template-columns:repeat(3,1fr);gap:0 2rem;margin-top:1.5rem}
 .svc div{border-top:2px solid var(--ink);padding:1rem 0 1.6rem}
 .svc h3{font-size:1.15rem;margin-bottom:.3rem}.svc p{margin:0;color:var(--mut);font-size:.95rem}
+/* Lista numerada de Cómo trabajo: counter-reset y counter-increment cuentan los pasos, y
+   ::before muestra el número dentro de un círculo. Es CSS puro: los números no están
+   escritos en el HTML. */
 .steps{counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:1.5rem;list-style:none;padding:0}
 .steps li{counter-increment:s}
 .steps li::before{content:counter(s);display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--acc);color:var(--accink);font-family:"Bricolage Grotesque",sans-serif;font-weight:800;margin-bottom:.8rem}
 .steps h3{font-size:1.1rem;margin-bottom:.3rem}.steps p{margin:0;color:var(--mut);font-size:.95rem}
+/* Sección de cierre con colores invertidos: usa --ink de fondo y --bg de texto, así
+   funciona igual en modo claro y oscuro. */
 .trust{background:var(--ink);color:var(--bg)}
 .trust h2{max-width:20ch}.trust .lead{color:inherit;opacity:.8}
+/* Preguntas frecuentes: details y summary forman un acordeón nativo del navegador, sin
+   JavaScript y accesible con el teclado. */
 details{border-bottom:1px solid var(--line);padding:1rem 0}
 summary{cursor:pointer;font-weight:600;font-size:1.05rem}
 details p{color:var(--mut);margin:.6rem 0 0;max-width:62ch}
@@ -81,18 +168,67 @@ details p{color:var(--mut);margin:.6rem 0 0;max-width:62ch}
 .contact .lead{margin:0 auto 1.6rem}
 .contact .cta{justify-content:center}
 footer{border-top:1px solid var(--line);padding:1.5rem 0;color:var(--mut);font-size:.9rem;text-align:center}
+/* Botón flotante de WhatsApp: position:fixed lo mantiene siempre visible en la esquina.
+   calc() suma el margen de seguridad inferior de los celulares. */
 .fab{position:fixed;right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:25;background:var(--wa);color:#fff;font-weight:600;text-decoration:none;padding:.75rem 1.2rem;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+/* ===== 4. BLOQUES PARA CONVERTIR VISITAS EN CONSULTAS =====
+   Microtexto de confianza bajo los botones, casos reales, oferta de lanzamiento y
+   paquetes. */
+.micro{margin:.9rem 0 0;color:var(--mut);font-size:.9rem}
+/* repeat(auto-fit, minmax(260px, 1fr)): la grilla calcula sola cuántas columnas entran
+   según el ancho disponible, sin media queries. */
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-top:1.5rem}
+.case,.launch{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.4rem}
+.case small{color:var(--mut);font-weight:600}
+.case h3{margin:.3rem 0 .6rem;font-size:1.2rem}
+.case p{margin:.3rem 0;color:var(--mut)}
+.case blockquote{margin:.8rem 0 0;padding-left:.9rem;border-left:3px solid var(--acc)}
+/* La tarjeta de lanzamiento usa borde punteado para distinguirse de un caso real. */
+.launch{border:2px dashed var(--ink);display:flex;flex-direction:column;gap:.7rem;align-items:flex-start}
+.launch h3{font-size:1.3rem}.launch p{margin:0;color:var(--mut)}
+/* Paquetes en 3 columnas. .hot resalta al recomendado, y .flag es la etiqueta que
+   sobresale por arriba: position:absolute respecto de su tarjeta, que tiene
+   position:relative. */
+.pks{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2rem}
+.pk{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;gap:.7rem;position:relative}
+.pk.hot{border:2px solid var(--ink)}
+.pk .flag{position:absolute;top:-12px;left:1.2rem;background:var(--acc);color:var(--accink);font-size:.78rem;font-weight:700;padding:.1rem .8rem;border-radius:999px}
+.pk h3{font-size:1.35rem}.pk p{margin:0;color:var(--mut)}
+.pk ul{margin:0;padding-left:1.1rem}.pk li{margin:.2rem 0}
+.pk .pr{font:700 1.15rem "Bricolage Grotesque",sans-serif}
+.pk .tm{font-size:.88rem;color:var(--mut)}
+.pk .btn{margin-top:auto;text-align:center}
+.terms{color:var(--mut);font-size:.92rem;margin-top:1.4rem;max-width:70ch}
+/* Bloque Sobre mí: avatar redondo con la inicial del nombre. Si hay foto, object-fit:cover
+   la recorta sin deformarla. */
+.who{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}.who h2{margin:0}
+.avatar{flex:none;width:64px;height:64px;border-radius:50%;background:var(--acc);color:var(--accink);display:grid;place-items:center;font:800 1.6rem "Bricolage Grotesque",sans-serif;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.bio .tags{margin:0 0 1.2rem}
+/* Adaptación a celular: por debajo de 820px los paquetes pasan a una sola columna. */
+@media (max-width:820px){.pks{grid-template-columns:1fr}}
+/* ===== 5. ANIMACIONES =====
+   El hero necesita position:relative para que el canvas de partículas (position:absolute)
+   quede detrás del contenido, y overflow:hidden para que nada se salga de su caja. */
 .hero{position:relative;overflow:hidden}
 .hero .wrap{position:relative}
+/* El canvas de la red de partículas cubre todo el hero. pointer-events:none deja pasar los
+   toques a los botones que están encima. */
 #net{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+/* Efecto de máquina de escribir: fuente monoespaciada y cursor parpadeante. steps(1) hace
+   que el cursor titile de golpe, como en una terminal. */
 .tw{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.98rem;margin:1.1rem 0 0;min-height:1.7em}
 .tw span:first-child{color:var(--wa);font-weight:700}
 .cur{display:inline-block;width:.55em;height:1.05em;background:var(--ink);vertical-align:-.15em;margin-left:2px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
+/* @keyframes define una animación. bob es una flotación suave: las ventanas suben unos
+   píxeles y vuelven (alternate), y cada una usa un animation-delay negativo distinto para
+   no moverse al mismo tiempo. */
 @keyframes bob{to{translate:0 -10px}}
 .stack .fr{animation:bob 5s ease-in-out infinite alternate}
 .stack .fr:nth-child(2){animation-delay:-1.7s}
 .stack .fr:nth-child(3){animation-delay:-3.2s}
+/* Sección Sobre mí en 2 columnas y ventana de terminal (.term) dibujada solo con CSS. */
 .bio .wrap{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
 .bio .lead{margin:0 0 1rem}
 .term{background:#0A1220;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,.25);font:.92rem/1.7 ui-monospace,Menlo,Consolas,monospace;color:#C8F169}
@@ -101,7 +237,11 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0;color:var(--mut);font-s
 .term pre{margin:0;padding:1.1rem 1.2rem 1.4rem;min-height:210px;white-space:pre-wrap;font:inherit}
 .term .cmd{color:#8FA0B8}
 .term .cur{background:#C8F169}
+/* En pantallas chicas la bio y la terminal pasan a una columna. */
 @media (max-width:820px){.bio .wrap{grid-template-columns:1fr}}
+/* ===== 6. ADAPTACIÓN A PANTALLAS CHICAS =====
+   Media queries por ancho. Hasta 820px se oculta el menú (queda el botón de contacto), las
+   grillas pasan a 1 o 2 columnas y se reducen los espacios. */
 @media (max-width:820px){
 .top nav{display:none}
 .hero .wrap,.styles{grid-template-columns:1fr}
@@ -110,42 +250,78 @@ footer{border-top:1px solid var(--line);padding:1.5rem 0;color:var(--mut);font-s
 .stack{height:330px}
 section{padding:3rem 0}
 }
+/* Por debajo de 480px (celulares chicos) las grillas de 2 columnas pasan a una sola. */
 @media (max-width:480px){.promises .wrap,.steps{grid-template-columns:1fr}}
+/* Accesibilidad: si el visitante pidió reducir el movimiento en su dispositivo, se apagan
+   las animaciones y el desplazamiento suave. */
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.stack .fr,.cur{animation:none!important}}
 </style>
 </head>
 <body>
+<!-- ENCABEZADO: logo, menú y botón de contacto. Los enlaces que empiezan con # saltan a la
+     sección con ese id (navegación interna). Los atributos data-wa y data-name no hacen nada
+     solos: el script los detecta y completa el enlace de WhatsApp y el nombre. -->
 <header class="top"><div class="wrap">
 <a class="logo" href="#inicio" data-name>Dylan</a>
-<nav><a href="#estilos">Estilos</a><a href="#servicios">Servicios</a><a href="#sobre-mi">Sobre mí</a><a href="#proceso">Cómo trabajo</a><a href="#faq">Preguntas</a></nav>
+<nav><a href="#estilos">Estilos</a><a href="#paquetes">Paquetes</a><a href="#sobre-mi">Sobre mí</a><a href="#proceso">Cómo trabajo</a><a href="#faq">Preguntas</a></nav>
 <a class="btn" data-wa="Hola! Vi tu portafolio y quiero consultarte por una web.">Escribime</a>
 </div></header>
 
+<!-- CONTENIDO PRINCIPAL. La etiqueta main le indica a lectores de pantalla y buscadores
+     dónde está lo importante. Cada section es un bloque de la página con su propio id. -->
 <main id="inicio">
+<!-- 1. PORTADA: la propuesta de valor en una frase, qué ofrezco y botones de acción. El
+     canvas es el fondo animado; aria-hidden="true" evita que los lectores de pantalla lo
+     anuncien, porque es solo decoración. -->
 <section class="hero"><canvas id="net" aria-hidden="true"></canvas><div class="wrap">
 <div>
-<span class="eyebrow">Diseño web para negocios y profesionales</span>
+<span class="eyebrow">Diseño web para emprendedores y profesionales</span>
 <h1>Webs que se ven profesionales y hacen que te escriban.</h1>
 <p class="lead">Diseño páginas claras, rápidas y cómodas en el celular, con un botón directo a WhatsApp para que tus clientes te contacten sin vueltas.</p>
+<!-- Línea que se escribe sola: el script va cambiando el texto del span con id tw. -->
 <p class="tw"><span>›</span> <span id="tw">landing pages claras</span><i class="cur"></i></p>
 <div class="cta"><a class="btn" href="#estilos">Ver estilos</a><a class="btn alt" data-wa="Hola! Vi tu portafolio y quiero consultarte por una web.">Consultar por WhatsApp</a></div>
+<p class="micro">Presupuesto sin compromiso · Atención personal por WhatsApp</p>
 </div>
+<!-- Contenedor vacío: el script lo llena con 3 maquetas de ejemplo. -->
 <div class="stack" id="stack" aria-hidden="true"></div>
 </div></section>
 
+<!-- 2. PROMESAS: cuatro razones para confiar, en lenguaje simple. -->
 <div class="promises"><div class="wrap">
-<div><b>Primero ves, después decidís</b><span>Te muestro una propuesta antes de avanzar.</span></div>
+<div><b>Ves una maqueta antes de avanzar</b><span>Antes de comprometerte, ves cómo queda tu portada.</span></div>
 <div><b>Pensada para celular</b><span>Se ve bien en cualquier pantalla.</span></div>
 <div><b>Contacto directo</b><span>Tus clientes te escriben por WhatsApp con un toque.</span></div>
 <div><b>Trato personal</b><span>Hablás conmigo, de principio a fin.</span></div>
 </div></div>
 
+<!-- 3. ESTILOS: el contenedor está vacío y el script genera las tarjetas desde el arreglo S.
+     Agregar un estilo es sumar una línea de datos, no copiar bloques de HTML. -->
 <section id="estilos"><div class="wrap">
 <h2>Estilos que puedo aplicar a tu negocio</h2>
-<p class="lead">Cada rubro transmite algo distinto. Estos son cuatro puntos de partida: los adapto a tu marca, tus colores y tu manera de comunicar.</p>
+<p class="lead">Cada rubro transmite algo distinto. Estos son cinco puntos de partida: los adapto a tu marca, tus colores y tu manera de comunicar.</p>
 <div class="styles" id="styles"></div>
 </div></section>
 
+<!-- 4. CASOS: se llena desde el arreglo CASES. Si no hay casos ni oferta de lanzamiento, el
+     script oculta toda la sección con el atributo hidden. -->
+<section id="casos"><div class="wrap">
+<h2>Casos y proyectos</h2>
+<p class="lead">Estoy sumando mis primeros casos reales.</p>
+<div class="cases" id="cases"></div>
+</div></section>
+
+<!-- 5. PAQUETES: las tarjetas salen del arreglo PK y los precios de CONFIG. Las condiciones
+     (cambios, pago, qué no incluye) quedan como texto fijo porque aplican a todos los
+     paquetes. -->
+<section id="paquetes"><div class="wrap">
+<h2>Paquetes</h2>
+<p class="lead">Elegí el punto de partida que se ajusta a lo que necesitás. Si no estás seguro, escribime y lo definimos juntos.</p>
+<div class="pks" id="pks"></div>
+<p class="terms">Todos los paquetes incluyen 2 rondas de cambios. El pago se hace en dos partes: 50% para empezar y 50% al entregar. No incluyen dominio propio ni fotos o textos profesionales; si no los tenés, te ayudo a ordenarlos.</p>
+</div></section>
+
+<!-- 6. SERVICIOS: lista simple de lo que ofrezco. -->
 <section id="servicios"><div class="wrap">
 <h2>Qué puedo hacer por vos</h2>
 <div class="svc">
@@ -158,81 +334,207 @@ section{padding:3rem 0}
 </div>
 </div></section>
 
+<!-- 7. SOBRE MÍ: biografía, herramientas y una terminal animada que arranca recién cuando
+     entra en pantalla (IntersectionObserver en el script). -->
 <section id="sobre-mi" class="bio"><div class="wrap">
 <div>
-<h2>Hola, soy Dylan</h2>
-<p class="lead">Soy un apasionado de la tecnología y el desarrollo. No tengo un título para mostrarte: aprendí por mi cuenta, practicando, probando y mejorando proyecto tras proyecto.</p>
-<p class="lead">Esa curiosidad es lo que le pongo a cada web: me importa que se vea bien, que funcione y que le sirva de verdad a tu negocio. Mi objetivo es simple: que tengas una página que genere confianza y te traiga consultas.</p>
+<div class="who"><span class="avatar" id="avatar">D</span><h2>Hola, soy Dylan</h2></div>
+<p class="lead">Diseño y desarrollo páginas web. Me apasiona la tecnología y aprendo todos los días construyendo: cada proyecto me enseña algo que aplico en el siguiente.</p>
+<p class="lead">Conmigo tenés atención directa, una web que se ve bien en el celular y que funciona, y cambios hasta que quedes conforme. Mi objetivo es simple: que tengas una página que genere confianza y te traiga consultas.</p>
+<div class="tags"><span>HTML y CSS</span><span>JavaScript</span><span>Diseño para celular</span><span>GitHub</span><span>Integración con WhatsApp</span></div>
 <div class="cta"><a class="btn" data-wa="Hola Dylan! Vi tu portafolio y quiero hablar de la web de mi negocio.">Hablemos</a></div>
 </div>
 <div class="term" id="term" aria-label="Resumen sobre Dylan"><div class="bar"><i></i><i></i><i></i></div><pre id="termout"></pre></div>
 </div></section>
 
+<!-- 8. PROCESO: lista ordenada con la etiqueta ol; los números los dibuja el CSS. -->
 <section id="proceso"><div class="wrap">
 <h2>Cómo trabajo</h2>
 <ol class="steps">
 <li><h3>Charlamos</h3><p>Me contás por WhatsApp qué hacés y qué necesitás.</p></li>
-<li><h3>Te muestro una propuesta</h3><p>Ves cómo quedaría antes de comprometerte.</p></li>
+<li><h3>Te muestro una maqueta</h3><p>Ves cómo quedaría tu portada antes de avanzar.</p></li>
 <li><h3>Ajustamos juntos</h3><p>Cambios de textos, colores y secciones hasta que estés conforme.</p></li>
 <li><h3>Publicamos</h3><p>Tu web queda online y lista para compartir.</p></li>
 </ol>
 </div></section>
 
+<!-- 9. CONFIANZA: refuerza que el trabajo se puede ver y probar. -->
 <section class="trust"><div class="wrap">
 <h2>Sin vueltas, con trabajo a la vista.</h2>
 <p class="lead">No te pido que confíes en un título. Lo que ves en esta página lo podés abrir, tocar y probar desde tu celular. Si algo no te cierra, lo cambiamos antes de seguir.</p>
 </div></section>
 
+<!-- 10. PREGUNTAS FRECUENTES: acordeón nativo con details y summary. Responder dudas de
+     precio, pago y cambios antes de que escriban reduce el miedo a consultar. -->
 <section id="faq"><div class="wrap">
 <h2>Preguntas frecuentes</h2>
 <details><summary>¿Necesito saber de tecnología?</summary><p>No. Vos me contás qué necesitás con tus palabras y yo me encargo del resto.</p></details>
 <details><summary>¿Qué necesito para empezar?</summary><p>Tu logo si lo tenés, los datos de contacto y una idea de lo que querés mostrar. Si algo falta, te ayudo a armarlo.</p></details>
 <details><summary>¿Cuánto cuesta?</summary><p>Depende de lo que necesites. Escribime y te paso un presupuesto sin compromiso.</p></details>
+<details><summary>¿Cómo se paga?</summary><p>En dos partes: el 50% para empezar y el 50% al entregar la web. Te paso los datos por WhatsApp.</p></details>
+<details><summary>¿Qué pasa si no me convence el diseño?</summary><p>Antes de avanzar ves una maqueta de tu portada, y cada paquete incluye 2 rondas de cambios. Así ajustamos hasta que quedes conforme.</p></details>
 <details><summary>¿Puedo pedir cambios después?</summary><p>Sí. Los ajustes durante el proceso están incluidos, y más adelante también podemos hacer actualizaciones.</p></details>
 <details><summary>¿Cómo la voy a ver publicada?</summary><p>Te paso un enlace para que la abras desde cualquier dispositivo y la compartas con tus clientes.</p></details>
 </div></section>
 
+<!-- 11. CONTACTO: botones a WhatsApp, Instagram y Facebook. El de Facebook se elimina por
+     script si no hay link configurado. -->
 <section class="contact"><div class="wrap">
 <h2>Contame qué necesitás</h2>
 <p class="lead">Escribime y charlamos sin compromiso. Te cuento qué estilo le queda mejor a tu negocio.</p>
-<div class="cta"><a class="btn" data-wa="Hola! Vi tu portafolio y quiero que me ayudes con la web de mi negocio.">Escribime por WhatsApp</a><a class="btn alt" id="ig" href="#">Instagram</a></div>
+<div class="cta"><a class="btn" data-wa="Hola! Vi tu portafolio y quiero que me ayudes con la web de mi negocio.">Escribime por WhatsApp</a><a class="btn alt" id="ig" href="#">Instagram</a><a class="btn alt" id="fb" href="#">Facebook</a></div>
 </div></section>
 </main>
 
+<!-- Pie de página y, justo después, el botón flotante de WhatsApp, siempre visible. -->
 <footer><div class="wrap">© 2026 <span data-name>Dylan</span> · Diseño web</div></footer>
 <a class="fab" data-wa="Hola! Vi tu portafolio y quiero consultarte por una web.">WhatsApp</a>
 
+<!-- JAVASCRIPT: toda la lógica vive acá, al final del body, para que la página se dibuje
+     primero y el script corra cuando el HTML ya existe. -->
 <script>
+// ============================================================
+// PARTE A - DATOS Y CONFIGURACIÓN
+// Lo que cambia de un cliente a otro vive en CONFIG y en los arreglos de datos (S, CASES,
+// PK). El resto del código solo lee esos datos. Separar datos y lógica permite
+// personalizar la página sin tocar el programa.
+// ============================================================
 // ===== CONFIGURACIÓN: cambiá estos datos =====
-var CONFIG={name:"Dylan",whatsapp:"5491100000000",instagram:"https://www.instagram.com/"}; // número con código de país, sin + ni espacios
+var CONFIG={
+  name:"Dylan",
+  whatsapp:"5491126476479",            // número con código de país, sin + ni espacios
+  instagram:"https://www.instagram.com/",
+  facebook:"",                         // link de tu página de Facebook (vacío = se oculta el botón)
+  photo:"",                            // ej: "dylan.jpg" (subí la foto al repo). Vacío = se muestra tu inicial
+  pixelId:"",                          // ID del Meta Pixel (opcional, para medir desde Facebook)
+  prices:{landing:"",web:"",tienda:""},// ej: "$80.000". Vacío = muestra "Consultá el precio"
+  launch:{on:true,slots:3}             // oferta de lanzamiento: poné on:false o slots:0 cuando ya no aplique
+};
 // =============================================
-var wa=function(m){return "https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(m)};
+// Cada mensaje de WhatsApp llega con 3 preguntas para calificar al cliente desde el primer contacto
+// Origen del tráfico: lee el parámetro utm_source de la dirección con URLSearchParams. Si
+// el link se comparte con ?utm_source=facebook, el mensaje indica de dónde llegó el
+// cliente.
+var ORIGIN=new URLSearchParams(location.search).get("utm_source")||"";
+// Texto fijo con 3 preguntas que se agrega a cada mensaje, para calificar al cliente desde
+// el primer contacto.
+var BRIEF="\n\nMi rubro:\nQué quiero lograr:\nPara cuándo lo necesito:";
+// wa(mensaje) arma el enlace de WhatsApp (wa.me) con el texto ya escrito.
+// encodeURIComponent convierte espacios, tildes y saltos de línea a un formato válido para
+// una dirección web.
+var wa=function(m){return "https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(m+BRIEF+(ORIGIN?"\n\n(Vengo de: "+ORIGIN+")":""))};
+// Los estilos de diseño de la sección Estilos. Cada objeto es un estilo: n nombre, f
+// fuente, a fondo, b texto, c acento, r redondeo de los botones, t título de ejemplo, btn
+// texto del botón, ideal rubros recomendados, tags etiquetas y demo (opcional) enlace a
+// una demo real.
 var S=[
 {n:"Cálida y cercana",f:"Georgia,serif",a:"#EEF4EE",b:"#1F3A2E",c:"#6FA383",r:"999px",t:"Un espacio para cuidarte",btn:"Pedir turno",ideal:"Psicólogos, nutricionistas, terapeutas y consultorios.",tags:["Suave","Redondeada","Transmite calma"]},
 {n:"Tienda con carrito por WhatsApp",f:"system-ui,sans-serif",a:"#F4F2F8",b:"#231C3A",c:"#8E5A9B",r:"8px",t:"Aromas para tu casa",btn:"Agregar",ideal:"Emprendimientos que venden productos y cierran por WhatsApp.",tags:["Carrito","Pedido armado","Catálogo"],demo:"landingperfumer.html"},
 {n:"Elegante y oscura",f:"Georgia,serif",a:"#121212",b:"#F2E8D5",c:"#C9A24B",r:"2px",t:"Estilo y precisión",btn:"Reservar",ideal:"Barberías, estudios, estética y servicios premium.",tags:["Sobria","Alto contraste","Premium"]},
-{n:"Vibrante y directa",f:"Impact,Haettenschweiler,'Arial Black',sans-serif",a:"#FFE14D",b:"#1B1B1B",c:"#FF4D6D",r:"6px",t:"SABOR QUE SE NOTA",btn:"Pedir ahora",ideal:"Gastronomía, ferias, eventos y marcas jóvenes.",tags:["Colores fuertes","Llamativa","Con energía"]}
+{n:"Vibrante y directa",f:"Impact,Haettenschweiler,'Arial Black',sans-serif",a:"#FFE14D",b:"#1B1B1B",c:"#FF4D6D",r:"6px",t:"SABOR QUE SE NOTA",btn:"Pedir ahora",ideal:"Gastronomía, ferias, eventos y marcas jóvenes.",tags:["Colores fuertes","Llamativa","Con energía"]},
+{n:"Futurista y tecnológica",f:"ui-monospace,Menlo,Consolas,monospace",a:"#03070A",b:"#E4FBFF",c:"#5FF0FF",r:"2px",t:"Una web del futuro",btn:"Iniciar",ideal:"Tecnología, gaming, estudios creativos y marcas que quieren destacarse.",tags:["Futurista","Animada","Alto impacto"],demo:"demo-futurista.html"}
 ];
+// PARTE B - CONTENIDO DINÁMICO
+// mock(s) devuelve el HTML de una maqueta de página. Escribe los colores del estilo como
+// variables CSS en el atributo style (--a, --b...) y el CSS ya preparado hace el resto.
 function mock(s){
   return '<div class="fr" style="--a:'+s.a+';--b:'+s.b+';--c:'+s.c+';--r:'+s.r+';--f:'+s.f+'"><div class="bar"><i></i><i></i><i></i></div><div class="pg"><div class="nv"><b></b><span></span><span></span><span></span></div><h4>'+s.t+'</h4><div class="ln"></div><div class="ln s"></div><u>'+s.btn+'</u><div class="cs"><i></i><i></i><i></i></div></div></div>';
 }
+// Dibuja las 3 primeras maquetas en la portada. map() convierte cada dato en HTML y join
+// con texto vacío los une en un solo bloque.
 document.getElementById("stack").innerHTML=[0,1,2].map(function(i){return mock(S[i])}).join("");
+// Dibuja una tarjeta por estilo. El operador ternario (condición ? si : no) agrega el
+// botón Ver demo en vivo solo cuando el estilo tiene demo. El botón de cada tarjeta lleva
+// data-wa con el nombre del estilo elegido.
 document.getElementById("styles").innerHTML=S.map(function(s){
   return '<article class="sc">'+mock(s)+'<h3>'+s.n+'</h3><p>Ideal para: '+s.ideal+'</p><div class="tags">'+s.tags.map(function(t){return '<span>'+t+'</span>'}).join("")+'</div><div class="cta">'+
   (s.demo?'<a class="btn" href="'+s.demo+'">Ver demo en vivo</a>':'')+
   '<a class="btn alt" data-wa="Hola! Vi tu portafolio y me interesa el estilo «'+s.n+'». Te cuento lo que necesito:">Quiero este estilo</a></div></article>';
 }).join("");
-document.querySelectorAll("[data-wa]").forEach(function(a){a.href=wa(a.dataset.wa);a.target="_blank";a.rel="noopener"});
+// ---- Casos reales y oferta de lanzamiento ----
+// Sumá tus casos así: {n:"Nombre del negocio",r:"Rubro",p:"Qué necesitaba",h:"Qué hice",q:"Opinión del cliente",by:"Nombre del cliente"}
+// Vacío por ahora: cuando haya casos reales se agregan en este arreglo y la sección se
+// actualiza sola.
+var CASES=[];
+// ch acumula el HTML de la sección, sea de casos o de la tarjeta de lanzamiento.
+var ch="";
+// Por cada caso arma una tarjeta. El testimonio es opcional: si no hay opinión, no se
+// muestra la cita.
+CASES.forEach(function(c){ch+='<article class="case"><small>'+c.r+'</small><h3>'+c.n+'</h3><p><b>Necesitaba:</b> '+c.p+'</p><p><b>Hice:</b> '+c.h+'</p>'+(c.q?'<blockquote>'+c.q+'<cite>'+c.by+'</cite></blockquote>':'')+'</article>'});
+// La tarjeta de lanzamiento aparece solo si está activada y quedan lugares (slots mayor a
+// 0).
+if(CONFIG.launch.on&&CONFIG.launch.slots>0)ch+='<article class="launch"><h3>Primeros proyectos con precio de lanzamiento</h3><p>Estoy sumando mis primeros casos reales. Si tenés un emprendimiento o un consultorio, te hago la web con precio de lanzamiento a cambio de tu opinión y de poder mostrar el resultado.</p><p><b>Lugares disponibles: '+CONFIG.launch.slots+'</b></p><a class="btn" data-wa="Hola! Vi tu portafolio y quiero sumarme al precio de lanzamiento.">Quiero mi lugar</a></article>';
+// Si ya hay casos, el subtítulo deja de decir que se están sumando.
+if(CASES.length)document.querySelector("#casos .lead").textContent="Trabajos reales y lo que se logró con cada uno.";
+// Si hay contenido se muestra. Si no, se oculta toda la sección para no dejar un bloque
+// vacío.
+if(ch)document.getElementById("cases").innerHTML=ch;else document.getElementById("casos").hidden=true;
+
+// ---- Paquetes (editá textos y plazos a lo que realmente podés cumplir) ----
+// Paquetes. id enlaza con el precio en CONFIG.prices, inc es la lista de lo incluido, t el
+// plazo y hot marca el recomendado.
+var PK=[
+{id:"landing",n:"Landing",d:"Una página clara con lo esencial y botón de WhatsApp.",inc:["1 página con secciones a medida","Botón de contacto por WhatsApp","Diseño para celular","Publicación online"],t:"5 a 7 días"},
+{id:"web",n:"Web completa",d:"Varias secciones para presentar tu servicio con más detalle.",inc:["Hasta 5 secciones","Preguntas frecuentes y contacto","Enlaces a tus redes","Publicación online"],t:"10 a 15 días",hot:1},
+{id:"tienda",n:"Tienda con carrito",d:"Tus clientes arman el pedido y te llega por WhatsApp.",inc:["Catálogo de productos","Carrito con total","Pedido armado por WhatsApp","Publicación online"],t:"10 a 15 días"}
+];
+// Dibuja una tarjeta por paquete. Si hay precio en CONFIG se muestra Desde y el precio. Si
+// no, Consultá el precio.
+document.getElementById("pks").innerHTML=PK.map(function(p){
+  var pr=CONFIG.prices[p.id];
+  return '<article class="pk'+(p.hot?' hot':'')+'">'+(p.hot?'<span class="flag">Recomendado</span>':'')+'<h3>'+p.n+'</h3><p>'+p.d+'</p><div class="pr">'+(pr?'Desde '+pr:'Consultá el precio')+'</div><ul>'+p.inc.map(function(i){return '<li>'+i+'</li>'}).join("")+'</ul><div class="tm">Plazo estimado: '+p.t+'</div><a class="btn'+(p.hot?'':' alt')+'" data-wa="Hola! Vi tu portafolio y me interesa el paquete «'+p.n+'».">Quiero este paquete</a></article>';
+}).join("");
+
+// ---- Foto, Facebook y medición ----
+// Avatar: muestra la inicial del nombre y, si hay foto configurada, la reemplaza por la
+// imagen.
+var av=document.getElementById("avatar");
+av.textContent=CONFIG.name.charAt(0).toUpperCase();
+if(CONFIG.photo)av.innerHTML='<img src="'+CONFIG.photo+'" alt="Foto de '+CONFIG.name+'">';
+// Meta Pixel (opcional): solo se carga si hay un ID configurado. El bloque es el código
+// oficial de Meta: crea la función fbq y descarga su script de forma asíncrona, sin frenar
+// la página.
+if(CONFIG.pixelId){
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+  fbq("init",CONFIG.pixelId);fbq("track","PageView");
+}
+
+// PARTE C - CONEXIÓN CON EL HTML
+// Recorre todos los elementos con data-wa (botones de contacto, paquetes, estilos) y les
+// asigna el enlace de WhatsApp. rel=noopener evita que la pestaña nueva pueda controlar
+// esta página (seguridad). Al hacer clic se envía el evento Contact al Pixel, si existe,
+// para medir cuántos clics llegan a WhatsApp.
+document.querySelectorAll("[data-wa]").forEach(function(a){
+  a.href=wa(a.dataset.wa);a.target="_blank";a.rel="noopener";
+  a.addEventListener("click",function(){if(window.fbq)fbq("track","Contact")});
+});
+// El nombre se escribe en todos los lugares marcados con data-name: se cambia en un solo
+// sitio (CONFIG.name).
 document.querySelectorAll("[data-name]").forEach(function(e){e.textContent=CONFIG.name});
+// Enlaces a redes tomados de CONFIG.
 var ig=document.getElementById("ig");ig.href=CONFIG.instagram;ig.target="_blank";ig.rel="noopener";
-document.title=CONFIG.name+" · Diseño web para negocios y profesionales";
+// Facebook es opcional: sin link configurado se elimina el botón del documento con
+// remove().
+var fb=document.getElementById("fb");
+if(CONFIG.facebook){fb.href=CONFIG.facebook;fb.target="_blank";fb.rel="noopener"}else fb.remove();
+// Título de la pestaña armado con el nombre configurado.
+document.title=CONFIG.name+" · Diseño web para emprendedores y profesionales";
 
 // ===== Animaciones (se desactivan si el usuario pidió menos movimiento) =====
+// PARTE D - ANIMACIONES
+// matchMedia lee la preferencia del sistema Reducir movimiento. RM queda en true o false,
+// y si es true no se anima nada (accesibilidad).
 var RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
+// sleep(ms) es una pausa basada en una Promesa. Permite escribir animaciones paso a paso
+// con await, en lugar de anidar setTimeout uno dentro de otro.
 var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
 
 // Frase que se escribe sola en el hero
+// F es la lista de frases que rota el efecto de escritura.
 var tw=document.getElementById("tw"),F=["landing pages claras","tiendas con carrito por WhatsApp","rediseños de webs","webs para profesionales"];
+// Bucle infinito: escribe la frase letra por letra (60 ms), espera 1,5 segundos, la borra
+// más rápido (30 ms) y sigue con la próxima. i%F.length hace que, al llegar a la última,
+// vuelva a la primera.
 async function loop(){
   var i=0;
   while(true){
@@ -243,11 +545,16 @@ async function loop(){
     await sleep(300);i++;
   }
 }
+// Solo arranca si el visitante no pidió reducir el movimiento.
 if(!RM)loop();
 
 // Terminal de la sección "Sobre mí"
+// Líneas de la terminal: [texto, 1] es un comando (se escribe más lento y con otro color);
+// sin el 1 es una respuesta.
 var L=[["$ whoami",1],["dylan, autodidacta"],["$ pasion --tema",1],["tecnología y desarrollo"],["$ objetivo",1],["tu web lista para recibir clientes"]];
 var out=document.getElementById("termout");
+// term() escribe las líneas una por una, simulando una terminal. Si RM es true, las
+// muestra completas sin animar.
 async function term(){
   out.innerHTML="";
   for(var i=0;i<L.length;i++){
@@ -260,29 +567,51 @@ async function term(){
   }
   if(!RM){var c=document.createElement("i");c.className="cur";out.lastChild.appendChild(c)}
 }
+// IntersectionObserver detecta cuándo la terminal entra en pantalla (40% visible) y recién
+// ahí arranca la animación. disconnect() deja de observar para que corra una sola vez. Si
+// el navegador no lo soporta, se ejecuta directamente. Así los efectos se cargan a
+// demanda, sin gastar recursos antes de tiempo.
 if("IntersectionObserver" in window){
   new IntersectionObserver(function(e,o){if(e[0].isIntersecting){o.disconnect();term()}},{threshold:.4}).observe(document.getElementById("term"));
 }else term();
 
 // Red de partículas conectadas detrás del hero
+// Esta función se ejecuta sola apenas se define (IIFE). Encierra las variables del efecto
+// para que no se mezclen con las del resto del programa.
 (function(){
   var cv=document.getElementById("net");
+  // Si no hay canvas o se pidió menos movimiento, sale sin hacer nada.
   if(!cv||RM)return;
+  // cx es el contexto 2D con el que se dibuja y N la lista de partículas. dpr es la densidad
+  // de píxeles de la pantalla (limitada a 2) para que el dibujo se vea nítido en pantallas
+  // retina sin gastar de más.
   var cx=cv.getContext("2d"),W,H,N=[],col="#5B6678",fr=0,dpr=Math.min(window.devicePixelRatio||1,2);
+  // size() ajusta el canvas al tamaño real del hero y crea las partículas. La cantidad
+  // depende del área (ancho por alto dividido 16000): pocas en el celular, más en pantallas
+  // grandes. Cada una nace con posición y velocidad al azar.
   function size(){
     W=cv.clientWidth;H=cv.clientHeight;
     cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
     var n=Math.round(W*H/16000);N=[];
     for(var i=0;i<n;i++)N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35});
   }
+  // draw() corre en cada cuadro. Mueve cada partícula, la hace rebotar en los bordes y
+  // dibuja líneas entre las que están a menos de 120 px, más tenues cuanto más lejos.
+  // requestAnimationFrame lo sincroniza con la pantalla y se pausa solo en pestañas ocultas,
+  // lo que ahorra batería.
   function draw(){
+    // Cada 60 cuadros (aprox. una vez por segundo) vuelve a leer el color --mut, para que las
+    // partículas sigan el modo claro u oscuro.
     if(fr++%60===0)col=getComputedStyle(document.documentElement).getPropertyValue("--mut").trim()||col;
     cx.clearRect(0,0,W,H);cx.fillStyle=col;cx.strokeStyle=col;
     N.forEach(function(p,i){
       p.x+=p.vx;p.y+=p.vy;
+      // Rebote: al tocar un borde se invierte la velocidad en ese eje.
       if(p.x<0||p.x>W)p.vx*=-1;
       if(p.y<0||p.y>H)p.vy*=-1;
       cx.globalAlpha=.6;cx.beginPath();cx.arc(p.x,p.y,1.8,0,6.283);cx.fill();
+      // Compara cada partícula solo con las siguientes (j=i+1) para no dibujar dos veces la
+      // misma línea. La distancia sale de Math.hypot.
       for(var j=i+1;j<N.length;j++){
         var q=N[j],d=Math.hypot(p.x-q.x,p.y-q.y);
         if(d<120){cx.globalAlpha=(1-d/120)*.35;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y);cx.stroke()}
@@ -290,6 +619,9 @@ if("IntersectionObserver" in window){
     });
     requestAnimationFrame(draw);
   }
+  // Arranque: calcula el tamaño y dibuja. ResizeObserver recalcula si cambia el tamaño del
+  // hero (girar el celular, achicar la ventana). Si el navegador no lo tiene, usa el evento
+  // resize.
   size();
   if(window.ResizeObserver)new ResizeObserver(size).observe(cv);else addEventListener("resize",size);
   draw();
