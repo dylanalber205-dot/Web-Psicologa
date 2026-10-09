@@ -1,0 +1,808 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Dylan Alber, Diseño Web</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300..800&family=Chakra+Petch:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Plan: cámara dentro de un sistema holográfico. Fondo de vacío con una
+   escena de canvas (cubos, esfera de alambre, cuadrícula en perspectiva)
+   que se mueve con el scroll. Paneles de cristal con esquinas de HUD. El
+   texto es grande y ancho (Unbounded), los datos van en mono y el cuerpo en
+   Chakra Petch, de corte técnico. Un solo acento cian; las tres direcciones
+   de venta cambian de paleta solo dentro del escenario. */
+
+:root {
+  --void: #03070a;
+  --fg: #e4fbff;
+  --muted: #7ea3ad;
+  --accent: #5ff0ff;
+  --accent-2: #b4f6ff;
+  --line: rgba(95, 240, 255, .18);
+  --glass: linear-gradient(150deg, rgba(95,240,255,.12), rgba(95,240,255,.02) 55%, rgba(95,240,255,.06));
+  --display: "Unbounded", "Arial Black", Arial, sans-serif;
+  --body: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--void); }
+html, body { margin: 0; }
+body {
+  background: var(--void);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  overflow-x: hidden;
+  padding-inline: 16px;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Escena de fondo */
+#fx {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+/* Viñeta y brillo de lectura */
+.vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(3,7,10,.85) 100%),
+    linear-gradient(180deg, transparent 60%, rgba(3,7,10,.9));
+}
+main, header, footer { position: relative; z-index: 2; }
+
+.mono {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cy { color: var(--accent); }
+
+/* Navegación */
+header.top {
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left: 0; right: 0;
+  z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 16px;
+  margin-inline: -16px;
+  background: linear-gradient(180deg, rgba(3,7,10,.85), rgba(3,7,10,.4));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.brand { font-family: var(--display); font-weight: 600; font-size: .9rem; text-decoration: none; letter-spacing: .02em; }
+nav.links { display: flex; gap: 20px; align-items: center; }
+nav.links a { text-decoration: none; font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+nav.links a:hover { color: var(--accent); }
+.pill {
+  border: 1px solid var(--accent);
+  padding: 8px 14px;
+  color: var(--accent) !important;
+  box-shadow: 0 0 18px -4px rgba(95,240,255,.6);
+}
+@media (max-width: 620px) { nav.links a:not(.pill) { display: none; } }
+
+/* Hero */
+.hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding-block: 110px 40px;
+  gap: 24px;
+}
+.hud-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 8vw, 7.4rem);
+  line-height: .92;
+  letter-spacing: -.035em;
+  margin: 0;
+  align-self: center;
+  max-width: 14ch;
+  text-wrap: balance;
+  text-shadow: 0 0 40px rgba(95,240,255,.25);
+}
+.hero h1 .w { display: inline-block; animation: rise 1.1s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i) * 80ms); }
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+  text-shadow: 0 0 28px rgba(95,240,255,.7);
+}
+@keyframes rise { from { transform: translateY(.4em) skewY(4deg); } to { transform: none; } }
+.hero-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: end;
+}
+.hero-foot p { margin: 0; max-width: 40ch; font-size: 1.2rem; color: #b8dbe2; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 22px;
+  text-decoration: none;
+  font-family: var(--mono); font-size: .76rem; letter-spacing: .1em; text-transform: uppercase;
+  background: var(--accent); color: #02161a;
+  box-shadow: 0 0 0 1px var(--accent), 0 0 30px -6px rgba(95,240,255,.8);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px var(--accent-2), 0 0 44px -4px rgba(95,240,255,1); background: var(--accent-2); }
+.btn.ghost { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.btn.ghost:hover { background: rgba(95,240,255,.08); }
+@media (max-width: 760px) {
+  .hero-foot { grid-template-columns: minmax(0, 1fr); }
+  .cta-row { justify-content: flex-start; }
+}
+@keyframes rise-in { from { opacity: .4; } to { opacity: 1; } }
+
+/* Cinta de datos */
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  padding-block: 14px;
+  margin-inline: -16px;
+  background: rgba(95,240,255,.04);
+}
+.ticker-track {
+  display: flex; gap: 28px; width: max-content;
+  animation: slide 40s linear infinite;
+  font-family: var(--display); font-weight: 500;
+  font-size: clamp(1rem, 2.2vw, 1.5rem);
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ticker-track span:nth-child(3n) { color: var(--accent); }
+.ticker-track span:nth-child(3n+1)::after { content: "◆"; margin-left: 28px; color: var(--muted); font-size: .7em; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* Secciones */
+section { padding-block: clamp(80px, 13vw, 160px); }
+.sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 20px 56px;
+  margin-bottom: 56px;
+  align-items: end;
+}
+.sec-head .mono { grid-column: 1 / -1; }
+.sec-head h2 {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(1.9rem, 4.6vw, 3.6rem);
+  line-height: 1.02; letter-spacing: -.03em; margin: 0;
+  text-wrap: balance;
+}
+.sec-head p { margin: 0; font-size: 1.15rem; color: var(--muted); max-width: 48ch; }
+@media (max-width: 760px) { .sec-head { grid-template-columns: minmax(0, 1fr); } }
+
+/* Panel de cristal con esquinas HUD */
+.glass {
+  position: relative;
+  background: var(--glass), rgba(3,10,14,.55);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(180,246,255,.12), 0 30px 80px -40px rgba(0,0,0,.9), 0 0 60px -30px rgba(95,240,255,.35);
+  padding: clamp(22px, 3.4vw, 40px);
+}
+.glass::before, .glass::after {
+  content: ""; position: absolute; width: 18px; height: 18px;
+  border-color: var(--accent); border-style: solid; border-width: 0; pointer-events: none;
+}
+.glass::before { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+.glass::after { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+
+/* Profundidad por scroll (transform solo; en reposo ya se ve) */
+.depth-stack { perspective: 1400px; display: grid; gap: 28px; }
+.depth-stack .glass { transform-origin: 50% 50%; will-change: transform; }
+
+/* Capas de confianza */
+.layers { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
+.layers .glass h3 {
+  font-family: var(--display); font-weight: 600; font-size: 1.3rem; line-height: 1.15;
+  margin: 18px 0 10px; letter-spacing: -.01em;
+}
+.layers .glass p { margin: 0; color: var(--muted); }
+.layers .idx { font-family: var(--display); font-size: 2.6rem; font-weight: 300; color: var(--accent); line-height: 1; text-shadow: 0 0 22px rgba(95,240,255,.6); }
+@media (max-width: 860px) { .layers { grid-template-columns: minmax(0,1fr); } }
+
+/* Direcciones: escenario sticky */
+.stage-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 40px; align-items: start; }
+.stage {
+  position: sticky; top: 100px;
+  height: min(74svh, 640px);
+  display: flex; flex-direction: column; justify-content: space-between;
+  overflow: hidden;
+  background: var(--bg-s, #071218);
+  color: var(--fg-s, #e4fbff);
+  transition: background .7s ease, color .7s ease, border-color .7s ease;
+  border-color: var(--acc-s, var(--accent));
+  box-shadow: 0 0 80px -28px var(--acc-s, var(--accent));
+}
+.stage .lab { font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--acc-s, var(--accent)); }
+.stage .mark {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 4.6rem);
+  line-height: .95; letter-spacing: -.04em; margin: 0;
+  color: var(--acc-s, var(--accent));
+  transition: color .7s ease;
+  text-wrap: balance;
+}
+.stage .sample { font-size: 1.12rem; line-height: 1.5; margin: 0; max-width: 32ch; opacity: .9; }
+.stage .chips { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.stage .chips span { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; padding: 6px 10px; border: 1px solid var(--acc-s, var(--accent)); color: var(--acc-s, var(--accent)); }
+
+.stage[data-dir="1"] { --bg-s: #120c08; --fg-s: #f3e6d2; --acc-s: #e0a04a; }
+.stage[data-dir="2"] { --bg-s: #f2ede2; --fg-s: #14291f; --acc-s: #1f7a55; }
+.stage[data-dir="3"] { --bg-s: #061a2e; --fg-s: #e3f2ff; --acc-s: #3fb8ff; }
+.stage[data-dir="3"] .mark { font-family: var(--mono); font-weight: 500; font-size: clamp(1.9rem, 4.6vw, 3.4rem); letter-spacing: -.05em; }
+.stage[data-dir="1"] .mark { font-family: var(--display); font-weight: 400; font-style: normal; }
+.stage[data-dir="2"] .mark { font-family: var(--display); font-weight: 600; }
+
+.panels { display: grid; gap: 22vh; padding-block: 8vh; }
+.panel { min-height: 46vh; display: flex; flex-direction: column; justify-content: center; gap: 14px; border-top: 1px solid var(--line); padding-top: 28px; }
+.panel h3 { font-family: var(--display); font-weight: 600; font-size: clamp(1.4rem, 3vw, 2.2rem); line-height: 1.1; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+.panel p { margin: 0; color: var(--muted); max-width: 46ch; }
+.panel ul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.panel li { padding-left: 24px; position: relative; color: #c4e6ee; }
+.panel li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
+@media (max-width: 860px) {
+  .stage-wrap { grid-template-columns: minmax(0, 1fr); }
+  .stage { position: relative; top: 0; height: 380px; }
+  .panels { gap: 40px; }
+}
+
+/* Proceso: línea de progreso */
+.timeline { position: relative; display: grid; gap: 28px; padding-left: 0; }
+.timeline::before {
+  content: ""; position: absolute; left: 22px; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(var(--accent), transparent);
+  transform: scaleY(var(--p, 1)); transform-origin: top;
+  box-shadow: 0 0 14px var(--accent);
+}
+.step { position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 22px; }
+.step .node {
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  font-family: var(--display); font-size: .85rem; font-weight: 600;
+  color: var(--accent);
+  background: #03070a;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 18px -2px rgba(95,240,255,.7);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.step .glass { padding: 24px 26px; }
+.step h3 { font-family: var(--display); font-weight: 600; font-size: 1.3rem; margin: 0 0 8px; letter-spacing: -.01em; }
+.step p { margin: 0; color: var(--muted); max-width: 60ch; }
+.step .tag { display: inline-block; margin-top: 14px; color: var(--accent-2); }
+@media (max-width: 560px) { .step { grid-template-columns: 36px minmax(0,1fr); gap: 14px; } .step .node { width: 36px; height: 36px; font-size: .7rem; } .timeline::before { left: 17px; } }
+
+/* Lecturas */
+.readouts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 18px; }
+.readouts .glass { display: flex; flex-direction: column; gap: 12px; min-height: 220px; justify-content: space-between; }
+.readouts .val { font-family: var(--display); font-weight: 300; font-size: clamp(2.6rem, 5vw, 4.2rem); line-height: 1; letter-spacing: -.04em; color: var(--accent); text-shadow: 0 0 26px rgba(95,240,255,.55); font-variant-numeric: tabular-nums; }
+.readouts h3 { font-family: var(--body); font-weight: 600; font-size: 1.08rem; margin: 0; line-height: 1.3; }
+.readouts p { margin: 0; color: var(--muted); font-size: .98rem; }
+.bar { height: 2px; background: var(--line); position: relative; overflow: hidden; }
+.bar::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--accent), transparent); animation: scan 3.2s linear infinite; }
+@keyframes scan { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@media (max-width: 960px) { .readouts { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 520px) { .readouts { grid-template-columns: minmax(0,1fr); } }
+
+/* Contacto */
+.contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 52px; padding: clamp(28px, 5vw, 64px); }
+.contact h2 { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 4.8vw, 3.6rem); letter-spacing: -.03em; line-height: 1.02; margin: 0 0 18px; text-wrap: balance; }
+.contact p.lead { margin: 0; color: var(--muted); font-size: 1.1rem; max-width: 40ch; }
+form { display: grid; gap: 20px; }
+label { display: grid; gap: 6px; }
+label > span { font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+input, select, textarea {
+  font: inherit; font-size: 1.04rem; color: var(--fg);
+  background: rgba(95,240,255,.04);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  border-radius: 0;
+  width: 100%; min-width: 0;
+  color-scheme: dark;
+}
+input::placeholder, textarea::placeholder { color: #47656d; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 24px -6px rgba(95,240,255,.6); }
+textarea { resize: vertical; min-height: 104px; }
+.form-note { font-family: var(--mono); font-size: .72rem; color: var(--muted); margin: 0; letter-spacing: .03em; }
+@media (max-width: 760px) { .contact { grid-template-columns: minmax(0,1fr); } }
+
+footer {
+  padding-block: 40px 36px;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px;
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+}
+footer a { text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 .w, .ticker-track, .bar::after { animation: none; }
+}
+</style>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="brand" href="#inicio">DYLAN ALBER</a>
+  <nav class="links" aria-label="Principal">
+    <a href="#capas">Capas</a>
+    <a href="#direcciones">Direcciones</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#incluye">Lecturas</a>
+    <a class="pill" href="#contacto">Pedir presupuesto</a>
+  </nav>
+</header>
+
+<main>
+  <div class="hero" id="inicio">
+    <div class="hud-top">
+      <span class="mono">Estudio de diseño web · sistema en línea</span>
+      <span class="mono">Sesión <span class="cy" id="clock">00:00:00</span></span>
+    </div>
+    <h1 aria-label="Una web que se siente adentro de tu negocio">
+      <span class="w" style="--i:0">Una</span>
+      <span class="w" style="--i:1">web</span>
+      <span class="w" style="--i:2">que</span>
+      <span class="w" style="--i:3">se</span>
+      <span class="w" style="--i:4">siente</span>
+      <span class="w" style="--i:5"><em>adentro</em></span>
+      <span class="w" style="--i:6">de</span>
+      <span class="w" style="--i:7">tu</span>
+      <span class="w" style="--i:8">negocio.</span>
+    </h1>
+    <div class="hero-foot">
+      <p>Rediseño tu web actual o la construyo desde cero. Cada pantalla responde en cinco segundos qué vendés, para quién es y cómo te escriben.</p>
+      <div class="cta-row">
+        <a class="btn" href="#contacto">Iniciar proyecto →</a>
+        <a class="btn ghost" href="#direcciones">Ver direcciones</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Fichas de producto</span><span>Pedido por WhatsApp</span><span>Carrito simple</span><span>Turnos y reservas</span><span>Material que educa</span><span>Velocidad en celular</span>
+      <span>Fichas de producto</span><span>Pedido por WhatsApp</span><span>Carrito simple</span><span>Turnos y reservas</span><span>Material que educa</span><span>Velocidad en celular</span>
+    </div>
+  </div>
+
+  <section id="capas">
+    <div class="sec-head">
+      <span class="mono">01 · Arquitectura de confianza</span>
+      <h2>Tres capas que trabajan antes de que alguien te escriba</h2>
+      <p>Una web no es un folleto. Es una secuencia: captar la atención, dar motivos para decidir y dejar un camino corto hacia el contacto.</p>
+    </div>
+    <div class="layers depth-stack" data-depth>
+      <article class="glass">
+        <span class="idx">01</span>
+        <h3>Atención en cinco segundos</h3>
+        <p>Una frase concreta, una foto propia y el servicio visible sin hacer scroll. Lo que no se entiende en ese tiempo se pierde.</p>
+      </article>
+      <article class="glass">
+        <span class="idx">02</span>
+        <h3>Motivos para decidir</h3>
+        <p>Precios o rangos, pruebas reales, preguntas frecuentes respondidas. Cada duda que el cliente tiene se resuelve antes de llamar.</p>
+      </article>
+      <article class="glass">
+        <span class="idx">03</span>
+        <h3>Contacto de un toque</h3>
+        <p>Un botón de WhatsApp con el mensaje precargado. El pedido sale completo, sin que nadie tenga que explicar nada.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="direcciones">
+    <div class="sec-head">
+      <span class="mono">02 · Tres lenguajes de venta</span>
+      <h2>Cada negocio vende de una manera distinta</h2>
+      <p>Elijo la dirección según quién compra y cómo decide. Desplazate: el escenario cambia de materia y de color con cada propuesta.</p>
+    </div>
+    <div class="stage-wrap">
+      <aside class="stage glass" id="stage" data-dir="1" aria-live="polite">
+        <div class="lab" id="stage-lab">Dirección 01 · Editorial de oficio</div>
+        <p class="mark" id="mark">Hecho a mano, sin atajos.</p>
+        <div>
+          <p class="sample" id="sample">Para marcas con historia. Fotografía a sangre y tipografía que pesa.</p>
+          <div class="chips"><span>Talleres</span><span>Cafés</span><span>Estudios</span></div>
+        </div>
+      </aside>
+      <div class="panels">
+        <article class="panel" data-dir="1" data-mark="Hecho a mano, sin atajos." data-sample="Para marcas con historia. Fotografía a sangre y tipografía que pesa." data-lab="Dirección 01 · Editorial de oficio">
+          <span class="mono">01 · Editorial de oficio</span>
+          <h3>Para quien vende un oficio, no un producto</h3>
+          <p>Talleres, cafés de barrio, estudios de tatuajes, profesionales con clientela fiel.</p>
+          <ul>
+            <li>Fotografía a sangre con texto superpuesto</li>
+            <li>Una frase grande en el primer pantallazo</li>
+            <li>El teléfono aparece en la primera mitad de la página</li>
+          </ul>
+        </article>
+        <article class="panel" data-dir="2" data-mark="Pedí en dos toques." data-sample="Para tiendas de productos chicos. Fichas claras y un carrito que no molesta." data-lab="Dirección 02 · Tienda cálida">
+          <span class="mono">02 · Tienda cálida</span>
+          <h3>Para quien vende productos y necesita que compren hoy</h3>
+          <p>Indumentaria, cosmética, productos naturales, regalos. Compra por carrito y cierra por WhatsApp.</p>
+          <ul>
+            <li>Selección de productos con cantidad y subtotal</li>
+            <li>Mensaje de pedido armado solo, listo para enviar</li>
+            <li>Ninguna cuenta obligatoria para comprar</li>
+          </ul>
+        </article>
+        <article class="panel" data-dir="3" data-mark="Qué, cuánto, cuándo." data-sample="Para servicios que se contratan por confianza. Datos ordenados, sin ruido." data-lab="Dirección 03 · Técnico limpio">
+          <span class="mono">03 · Técnico limpio</span>
+          <h3>Para servicios que la gente compara antes de llamar</h3>
+          <p>Psicología, nutrición, abogados, contadores, reparaciones. Información precisa y acceso directo al turno.</p>
+          <ul>
+            <li>Tipografía mono para datos y horarios</li>
+            <li>Preguntas frecuentes respondidas antes de que las hagan</li>
+            <li>Material breve y útil como carta de presentación</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso">
+    <div class="sec-head">
+      <span class="mono">03 · Protocolo de trabajo</span>
+      <h2>Cuatro etapas, cada una con un entregable</h2>
+      <p>Sabés en qué punto está tu web en todo momento. Nunca pagás una etapa que no viste terminada.</p>
+    </div>
+    <div class="timeline" id="timeline">
+      <div class="step">
+        <div class="node">01</div>
+        <div class="glass">
+          <h3>Llamada de veinte minutos</h3>
+          <p>Me contás qué vendés, a quién y de dónde llegan hoy los clientes. Con eso defino la dirección visual y el presupuesto cerrado.</p>
+          <span class="mono tag">Entregable · resumen escrito de la propuesta</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="node">02</div>
+        <div class="glass">
+          <h3>Mapa de la página</h3>
+          <p>Qué ve el cliente primero, qué sección responde cada duda y dónde está el botón para escribirte. Lo aprobás antes de diseñar nada.</p>
+          <span class="mono tag">Entregable · estructura de secciones y textos base</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="node">03</div>
+        <div class="glass">
+          <h3>Diseño en dos vueltas</h3>
+          <p>Primera versión completa en celular y computadora, con tus fotos y tus textos reales. Incluye una ronda de cambios.</p>
+          <span class="mono tag">Entregable · página lista para revisar en tu dispositivo</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="node">04</div>
+        <div class="glass">
+          <h3>Publicación y treinta días de ajustes</h3>
+          <p>La subo a tu dominio, conecto el contacto y mido la velocidad. Durante un mes corrijo lo que aparezca al usarla de verdad.</p>
+          <span class="mono tag">Entregable · web publicada y acceso para editarla</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="incluye">
+    <div class="sec-head">
+      <span class="mono">04 · Lecturas de cada entrega</span>
+      <h2>Lo que medimos antes de dar por terminada una web</h2>
+      <p>Cuatro controles que se revisan en un celular con datos móviles, no en una computadora de escritorio.</p>
+    </div>
+    <div class="readouts">
+      <article class="glass">
+        <span class="val">2 s</span>
+        <div>
+          <h3>Carga en celular</h3>
+          <p>Imágenes comprimidas y sin librerías de más. Es el umbral que mido antes de entregar.</p>
+        </div>
+        <div class="bar"></div>
+      </article>
+      <article class="glass">
+        <span class="val">1 tap</span>
+        <div>
+          <h3>Contacto directo</h3>
+          <p>Cada botón abre WhatsApp con el producto o servicio ya escrito.</p>
+        </div>
+        <div class="bar"></div>
+      </article>
+      <article class="glass">
+        <span class="val">5 s</span>
+        <div>
+          <h3>Primer pantallazo claro</h3>
+          <p>Una frase concreta, una foto real y un llamado a la acción. Sin palabras vacías.</p>
+        </div>
+        <div class="bar"></div>
+      </article>
+      <article class="glass">
+        <span class="val">100%</span>
+        <div>
+          <h3>Tus textos y tus fotos</h3>
+          <p>Nada de relleno. Si faltan fotos, te digo qué sacar y cómo.</p>
+        </div>
+        <div class="bar"></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="contacto" style="padding-top:0">
+    <div class="glass contact">
+      <div>
+        <span class="mono">05 · Iniciar proyecto</span>
+        <h2 style="margin-top:14px">Contame tu negocio.</h2>
+        <p class="lead">Completá tres datos y se arma un mensaje para enviarme por WhatsApp. Respondo en el día con una propuesta y un presupuesto cerrado.</p>
+      </div>
+      <form id="brief" novalidate>
+        <label>
+          <span>Nombre</span>
+          <input id="f-name" name="name" autocomplete="name" placeholder="Cómo te llamás">
+        </label>
+        <label>
+          <span>Qué vendés</span>
+          <select id="f-type" name="type">
+            <option value="Servicio profesional">Servicio profesional</option>
+            <option value="Productos para compra online">Productos para compra online</option>
+            <option value="Oficio o local">Oficio o local</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </label>
+        <label>
+          <span>Qué querés que pase al entrar</span>
+          <textarea id="f-goal" name="goal" placeholder="Por ejemplo: que me escriban para pedir turno"></textarea>
+        </label>
+        <button class="btn" type="submit" style="justify-self:start">Armar mensaje por WhatsApp →</button>
+        <p class="form-note" id="note">Se abre WhatsApp con el mensaje listo. Nada se envía sin que lo confirmes.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="mono">Dylan Alber · Diseño web</span>
+  <span class="mono"><a href="#inicio">Volver al inicio ↑</a></span>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Reloj de sesión
+  var clock = document.getElementById("clock");
+  var start = Date.now();
+  function tick() {
+    var s = Math.floor((Date.now() - start) / 1000);
+    var h = String(Math.floor(s / 3600)).padStart(2, "0");
+    var m = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+    var ss = String(s % 60).padStart(2, "0");
+    clock.textContent = h + ":" + m + ":" + ss;
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Escena de canvas: cubos, esfera de alambre y cuadrícula en perspectiva
+  var cv = document.getElementById("fx");
+  var ctx = cv.getContext("2d");
+  var W = 0, H = 0, dpr = 1, t = 0, sy = 0, px = 0, py = 0;
+  var cubes = [];
+  for (var i = 0; i < 110; i++) {
+    cubes.push({
+      x: Math.random() * 2 - 1, y: Math.random() * 2 - 1,
+      z: Math.random() * 4 + 0.3,
+      r: Math.random() * 6.28, sp: Math.random() * 0.5 + 0.15,
+      s: Math.random() * 0.035 + 0.012
+    });
+  }
+  // Icosaedro: 12 vértices, 30 aristas
+  var phi = (1 + Math.sqrt(5)) / 2;
+  var V0 = [[0,1,phi],[0,-1,phi],[0,1,-phi],[0,-1,-phi],[1,phi,0],[-1,phi,0],[1,-phi,0],[-1,-phi,0],[phi,0,1],[-phi,0,1],[phi,0,-1],[-phi,0,-1]];
+  var E = [];
+  for (var a = 0; a < V0.length; a++) for (var b = a + 1; b < V0.length; b++) {
+    var dx = V0[a][0]-V0[b][0], dy = V0[a][1]-V0[b][1], dz = V0[a][2]-V0[b][2];
+    if (Math.abs(Math.sqrt(dx*dx+dy*dy+dz*dz) - 2) < 0.01) E.push([a, b]);
+  }
+  var IV = V0.map(function (v) { var l = Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]); return [v[0]/l, v[1]/l, v[2]/l]; });
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  window.addEventListener("scroll", function () { sy = window.scrollY; }, { passive: true });
+  window.addEventListener("pointermove", function (e) {
+    px = (e.clientX / W) * 2 - 1; py = (e.clientY / H) * 2 - 1;
+  }, { passive: true });
+
+  function scene(time) {
+    ctx.clearRect(0, 0, W, H);
+    var cam = sy * 0.0012;
+    var unit = Math.min(W, H);
+    var hx = W * 0.5, hy = H * 0.58;
+
+    // Cuadrícula de piso en perspectiva
+    ctx.lineWidth = 1;
+    var off = (time * 0.12 + cam) % 1;
+    for (var k = 0; k < 14; k++) {
+      var z = 1 + ((k + off) / 14) * 16;
+      var yy = hy + (H * 0.42) / z;
+      var al = 0.05 + 0.25 * (1 - k / 14);
+      ctx.strokeStyle = "rgba(95,240,255," + al.toFixed(3) + ")";
+      ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W, yy); ctx.stroke();
+    }
+    for (var c = -12; c <= 12; c++) {
+      ctx.strokeStyle = "rgba(95,240,255,0.08)";
+      ctx.beginPath();
+      ctx.moveTo(hx + c * unit * 0.09, hy);
+      ctx.lineTo(hx + c * unit * 0.9, H);
+      ctx.stroke();
+    }
+
+    // Barrido horizontal
+    var sweep = ((time * 0.06) % 1) * H;
+    var g = ctx.createLinearGradient(0, sweep - 40, 0, sweep + 40);
+    g.addColorStop(0, "rgba(95,240,255,0)");
+    g.addColorStop(0.5, "rgba(95,240,255,0.10)");
+    g.addColorStop(1, "rgba(95,240,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(0, sweep - 40, W, 80);
+
+    // Cubos flotantes que se acercan
+    for (var j = 0; j < cubes.length; j++) {
+      var q = cubes[j];
+      q.z -= q.sp * 0.006;
+      if (q.z < 0.25) q.z += 4;
+      var zz = q.z - cam * 0.5;
+      if (zz < 0.25) zz += 4;
+      var sx = hx + (q.x + px * 0.03 / zz) * W * 0.5 / zz;
+      var syy = hy + (q.y + py * 0.03 / zz) * H * 0.5 / zz;
+      var size = q.s * unit / zz * 6;
+      var rot = q.r + time * q.sp * 0.4;
+      var a2 = Math.min(1, 1.2 / zz) * 0.85;
+      ctx.save();
+      ctx.translate(sx, syy); ctx.rotate(rot);
+      ctx.strokeStyle = "rgba(180,246,255," + a2.toFixed(3) + ")";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(-size / 2, -size / 2, size, size);
+      ctx.restore();
+    }
+
+    // Esfera de alambre (icosaedro) a la derecha
+    var ox = W * 0.8, oy = H * 0.34;
+    var ry = time * 0.25 + px * 0.4, rx = time * 0.15 + py * 0.3 + cam * 0.5;
+    var cy = Math.cos(ry), sy2 = Math.sin(ry), cx = Math.cos(rx), sx2 = Math.sin(rx);
+    var P = IV.map(function (v) {
+      var x1 = v[0] * cy + v[2] * sy2;
+      var z1 = -v[0] * sy2 + v[2] * cy;
+      var y1 = v[1] * cx - z1 * sx2;
+      var z2 = v[1] * sx2 + z1 * cx;
+      var d = 3.2 + z2;
+      return [ox + x1 * unit * 0.22 * (3.2 / d) * 2.1, oy + y1 * unit * 0.22 * (3.2 / d) * 2.1, z2];
+    });
+    ctx.shadowColor = "rgba(95,240,255,1)";
+    ctx.shadowBlur = 14;
+    E.forEach(function (e) {
+      var p1 = P[e[0]], p2 = P[e[1]];
+      var depth = (p1[2] + p2[2]) / 2;
+      ctx.strokeStyle = "rgba(95,240,255," + (0.25 + (depth + 1) * 0.3).toFixed(3) + ")";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke();
+    });
+    ctx.shadowBlur = 0;
+
+    // Líneas de circuito que cruzan la escena
+    ctx.lineWidth = 1.2;
+    for (var L = 0; L < 5; L++) {
+      var ly = H * (0.18 + L * 0.13) + Math.sin(time * 0.5 + L) * 10;
+      var seg = ((time * 0.2 + L * 0.37) % 1);
+      var x0 = seg * (W + 300) - 150;
+      var grad = ctx.createLinearGradient(x0 - 180, 0, x0, 0);
+      grad.addColorStop(0, "rgba(95,240,255,0)");
+      grad.addColorStop(1, "rgba(95,240,255,0.65)");
+      ctx.strokeStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(x0 - 180, ly);
+      ctx.lineTo(x0 - 120, ly);
+      ctx.lineTo(x0 - 100, ly + (L % 2 ? 18 : -18));
+      ctx.lineTo(x0, ly + (L % 2 ? 18 : -18));
+      ctx.stroke();
+    }
+  }
+
+  var running = !reduce;
+  function loop(ts) {
+    t = ts / 1000;
+    scene(t);
+    if (running) requestAnimationFrame(loop);
+  }
+  if (reduce) { scene(0); } else { requestAnimationFrame(loop); }
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && !reduce) requestAnimationFrame(loop);
+  });
+
+  // Profundidad por scroll en paneles de cristal
+  var depthEls = document.querySelectorAll(".depth-stack .glass");
+  function depthUpdate() {
+    var mid = window.innerHeight / 2;
+    depthEls.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      var d = ((r.top + r.height / 2) - mid) / window.innerHeight;
+      var dz = Math.min(Math.abs(d), 1) * -90;
+      var rx = d * -6;
+      el.style.transform = "translateZ(" + dz.toFixed(1) + "px) rotateX(" + rx.toFixed(2) + "deg)";
+      el.style.opacity = (1 - Math.min(Math.abs(d), 1) * 0.35).toFixed(3);
+    });
+  }
+  if (!reduce) {
+    window.addEventListener("scroll", depthUpdate, { passive: true });
+    window.addEventListener("resize", depthUpdate);
+    depthUpdate();
+  }
+
+  // Línea de progreso del proceso
+  var tl = document.getElementById("timeline");
+  function timelineUpdate() {
+    var r = tl.getBoundingClientRect();
+    var p = (window.innerHeight * 0.6 - r.top) / r.height;
+    tl.style.setProperty("--p", Math.max(0.04, Math.min(1, p)).toFixed(3));
+  }
+  window.addEventListener("scroll", timelineUpdate, { passive: true });
+  window.addEventListener("resize", timelineUpdate);
+  timelineUpdate();
+
+  // Escenario de direcciones
+  var stage = document.getElementById("stage");
+  var mark = document.getElementById("mark");
+  var sample = document.getElementById("sample");
+  var lab = document.getElementById("stage-lab");
+  var panels = document.querySelectorAll(".panel");
+  function activate(p) {
+    stage.dataset.dir = p.dataset.dir;
+    lab.textContent = p.dataset.lab;
+    mark.textContent = p.dataset.mark;
+    sample.textContent = p.dataset.sample;
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) activate(en.target); });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    panels.forEach(function (p) { io.observe(p); });
+  }
+
+  // Formulario: arma el mensaje y abre WhatsApp. No envía nada por su cuenta.
+  var form = document.getElementById("brief");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("f-name").value.trim();
+    var type = document.getElementById("f-type").value;
+    var goal = document.getElementById("f-goal").value.trim();
+    var msg = "Hola Dylan, soy " + (name || "(sin nombre)") + ". Vendo: " + type + ".";
+    if (goal) msg += " Quiero que la web logre esto: " + goal;
+    msg += " ¿Podemos hablar de un presupuesto?";
+    var note = document.getElementById("note");
+    try {
+      var w = window.open("https://wa.me/5491126476479?text=" + encodeURIComponent(msg), "_blank", "noopener");
+      note.textContent = "Se abrió WhatsApp con el mensaje listo. Si no se abrió, copiá este texto y mandalo: " + msg;
+    } catch (err) {
+      note.textContent = "Copiá este texto y mandalo por WhatsApp: " + msg;
+    }
+  });
+})();
+</script>
+
+</body></html>
