@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <!-- PORTAFOLIO WEB - Dylan
@@ -377,12 +376,12 @@ section{padding:3rem 0}
 <details><summary>¿Cómo la voy a ver publicada?</summary><p>Te paso un enlace para que la abras desde cualquier dispositivo y la compartas con tus clientes.</p></details>
 </div></section>
 
-<!-- 11. CONTACTO: botones a WhatsApp, Instagram y Facebook. El de Facebook se elimina por
-     script si no hay link configurado. -->
+<!-- 11. CONTACTO: botones a WhatsApp y Facebook. El de Facebook se elimina por script si no
+     hay link configurado. -->
 <section class="contact"><div class="wrap">
 <h2>Contame qué necesitás</h2>
 <p class="lead">Escribime y charlamos sin compromiso. Te cuento qué estilo le queda mejor a tu negocio.</p>
-<div class="cta"><a class="btn" data-wa="Hola! Vi tu portafolio y quiero que me ayudes con la web de mi negocio.">Escribime por WhatsApp</a><a class="btn alt" id="ig" href="#">Instagram</a><a class="btn alt" id="fb" href="#">Facebook</a></div>
+<div class="cta"><a class="btn" data-wa="Hola! Vi tu portafolio y quiero que me ayudes con la web de mi negocio.">Escribime por WhatsApp</a><a class="btn alt" id="fb" href="#">Facebook</a></div>
 </div></section>
 </main>
 
@@ -403,7 +402,6 @@ section{padding:3rem 0}
 var CONFIG={
   name:"Dylan",
   whatsapp:"5491126476479",            // número con código de país, sin + ni espacios
-  instagram:"https://www.instagram.com/",
   facebook:"",                         // link de tu página de Facebook (vacío = se oculta el botón)
   photo:"",                            // ej: "dylan.jpg" (subí la foto al repo). Vacío = se muestra tu inicial
   pixelId:"",                          // ID del Meta Pixel (opcional, para medir desde Facebook)
@@ -511,8 +509,6 @@ document.querySelectorAll("[data-wa]").forEach(function(a){
 // El nombre se escribe en todos los lugares marcados con data-name: se cambia en un solo
 // sitio (CONFIG.name).
 document.querySelectorAll("[data-name]").forEach(function(e){e.textContent=CONFIG.name});
-// Enlaces a redes tomados de CONFIG.
-var ig=document.getElementById("ig");ig.href=CONFIG.instagram;ig.target="_blank";ig.rel="noopener";
 // Facebook es opcional: sin link configurado se elimina el botón del documento con
 // remove().
 var fb=document.getElementById("fb");
